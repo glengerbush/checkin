@@ -1,0 +1,8 @@
+{
+    "fieldErrors": [
+        {
+            "name":   "weight",
+            "status": "Weights cannot add up to more than 100 percent."
+        }
+    ]
+}

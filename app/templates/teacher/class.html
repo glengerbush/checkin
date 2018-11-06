@@ -1,0 +1,657 @@
+<div id="main-content1">
+    <h1>{{ class_.name }}</h1>
+    <h5><b>Enrollment: </b>{{ enrollment }}</h5>
+    <!--- print class info here eventually --->
+    <ul class="nav nav-pills mb-3" id="gradebooktabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link" id="grades-tab" data-toggle="tab" href="#grades" role="tab"
+               aria-controls="grades" aria-selected="true">Scores</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" id="assignments-tab" data-toggle="tab" href="#assignments" role="tab"
+               aria-controls="assignments" aria-selected="false">Projects</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="assignment-categories-tab" data-toggle="tab" href="#assignment-categories"
+               role="tab" aria-controls="assignment-categories" aria-selected="false">Categories</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="learning-goals-tab" data-toggle="tab" href="#learning-goals"
+               role="tab" aria-controls="learning-goals" aria-selected="false">Learning Goals</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="attendance-tab" data-toggle="tab" href="#attendance"
+               role="tab" aria-controls="attendance" aria-selected="false"></a>
+        </li>
+    </ul>
+    <div class="tab-content" id="gradebookcontent">
+        <div id="grades" class="tab-pane fade show in active" role="tabpanel" aria-labelledby="grades-tab">
+            <table id="grades-table" class="table table-striped nowrap table-bordered"
+                   style="width:100%">
+                <thead>
+                <tr class='grades-header'></tr>
+                </thead>
+            </table>
+        </div>
+        <div id="assignments" class="tab-pane fade" role="tabpanel" aria-labelledby="assignments-tab">
+            <table id="assignments-table" class="table table-striped table-bordered dt-responsive nowrap"
+                   style="width:100%">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Learning Goal</th>
+                    <th>Total Points</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="assignment-categories" class="tab-pane fade" role="tabpanel"
+             aria-labelledby="assignment-categories-tab">
+            <table id="assignment-categories-table" class="table table-striped table-bordered dt-responsive nowrap"
+                   style="width:100%">
+                <thead>
+                <tr>
+                    {% for label, name in assignment_categories_col %}
+                        <th>{{ label }}</th>
+                    {% endfor %}
+                    <th>Class Avg.</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="learning-goals" class="tab-pane fade" role="tabpanel"
+             aria-labelledby="learning-goals-tab">
+            <table id="learning-goals-table" class="table table-striped table-bordered dt-responsive nowrap"
+                   style="width:100%">
+                <thead>
+                <tr>
+                    {% for label, name in learning_goals_col %}
+                        <th>{{ label }}</th>
+                    {% endfor %}
+                    <th>Class Avg.</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+        <div id="attendance" class="tab-pane fade" role="tabpanel" aria-labelledby="attendance-tab">
+        </div>
+    </div>
+</div>
+
+<script>
+var grades_editor;
+var assignments_editor;
+var assignment_categories_editor;
+var learning_goals_editor;
+var attendance_editor;
+(function ($) {
+    /////////////////////////////////////
+    /////     Scores(Grades)    /////////
+    /////////////////////////////////////
+    $(document).ready(function () {
+        var name = "grades";
+        var tablename = '#' + name + '-table';
+        var fieldString, tableobject;
+
+        function manual_ajax_grades_dt() {
+            $.getJSON('/api/v1/classes/{{ class_.id }}/' + name, function (data) {
+                creategradestable(data)
+            })
+                .fail(function (response, exception) {
+                    var msg = '';
+                    if (response.status === 0) {
+                        msg = 'Not connect.\n Verify Network.';
+                    } else if (response.status == 404) {
+                        msg = 'Requested page not found. [404]';
+                    } else if (response.status == 500) {
+                        msg = 'Internal Server Error [500].';
+                    } else if (exception === 'parsererror') {
+                        msg = 'Requested JSON parse failed.';
+                    } else if (exception === 'timeout') {
+                        msg = 'Time out error.';
+                    } else if (exception === 'abort') {
+                        msg = 'Ajax request aborted.';
+                    } else {
+                        msg = 'Uncaught Error.\n' + response.responseText;
+                    }
+                    console.log(msg);
+                });
+        }
+
+        function creategradestable(data) {
+            // Iterate each column and print table headers for Datatables
+            $.each(data.fields, function (k, fieldObj) {
+                fieldString = '<th>' + fieldObj.label + '</th>';
+                $('.' + name + '-header').append(fieldString);
+            });
+
+            //datatable creation here
+
+
+            grades_editor = new $.fn.dataTable.Editor({
+                ajax: {
+                    contentType: 'application/json',
+                    data: function (d) {
+                        return JSON.stringify(d);
+                    },
+                    edit: {
+                        type: 'PUT',
+                        url: "/api/v1/classes/{{ class_.id }}/" + name + "/_id_",
+                        contentType: 'application/json',
+                        data: function (d) {
+                            var tmp = d['data'];
+                            d = tmp;
+                            return JSON.stringify(d);
+                        }
+                    }
+                },
+                table: tablename,
+                idSrc: "StudentID",
+                fields: data.fields
+            });
+
+            $(tablename).on('click', 'tbody td.editable', function (e) {
+                grades_editor.inline(this, {onBlur: 'submit'});
+            });
+
+            tableobject = $(tablename).DataTable({
+                responsive: false,
+                dom: "Bfrtip",
+                data: data.data,
+                columns: data.columns,
+                select: {
+                    style: 'os',
+                    blurable: true
+                },
+                keys: {
+                    editor: grades_editor,
+                    columns: ':not(:first-child, :nth-child(2), :last-child)'
+                },
+                scrollX: true,
+                scrollY: 400,
+                scrollCollapse: true,
+                paging: false,
+                buttons: [
+                    {extend: "edit", editor: grades_editor},
+                    'excel',
+                    'print'
+                ]
+
+            });
+        }
+
+        manual_ajax_grades_dt();
+        $('#' + name + '-tab').on('click', function () {
+            tableobject.destroy();
+            $('#' + name).empty().append("<table id='" + name + "-table' class='table table-striped nowrap table-bordered'' style='width:100%'><thead><tr class='" + name + "-header'></tr></table>");
+            manual_ajax_grades_dt();
+        });
+    });
+
+
+    /////////////////////////////////////
+    /////  Projects(Assignments)  ///////
+    /////////////////////////////////////
+    $(document).ready(function () {
+        var name = "assignments";
+        var tablename = '#' + name + '-table';
+        assignments_editor = new $.fn.dataTable.Editor({
+            ajax: {
+                contentType: 'application/json',
+                data: function (d) {
+                    return JSON.stringify(d);
+                },
+                create: {
+                    type: 'POST',
+                    url: '/api/v1/classes/{{ class_.id }}/' + name,
+                    contentType: 'application/json',
+                    data: function (d) {
+                        var tmp = d['data'];
+                        d = tmp;
+                        return JSON.stringify(d);
+                    }
+                },
+                edit: {
+                    type: 'PUT',
+                    url: "/api/v1/classes/{{ class_.id }}/" + name + "/_id_",
+                    contentType: 'application/json',
+                    data: function (d) {
+                        var tmp = d['data'];
+                        d = tmp;
+                        return JSON.stringify(d);
+                    }
+                },
+                remove: {type: 'DELETE', url: '/api/v1/classes/{{ class_.id }}/' + name + '/_id_'}
+            },
+            table: tablename,
+            i18n: {
+                remove: {
+                    confirm: {
+                        _: "Deleting these assignments will delete all scores associated with them.\nAre you sure you wish to delete the assignments?",
+                        1: "Deleting this assignment will delete all scores associated with it.\nAre you sure you wish to delete the assignment?"
+                    }
+                }
+            },
+            idSrc: "Assignment.id",
+            fields: [
+                {
+                    label: "Name:",
+                    name: "Assignment.name"
+                },
+                {
+                    label: "Category:",
+                    name: "Assignment.assignment_category_id",
+                    type: "select",
+                },
+                {
+                    label: "Learning Goal:",
+                    name: "Assignment.learning_goal_id",
+                    type: "select",
+                },
+                {
+                    label: "Total Points:",
+                    name: "Assignment.total_points"
+                },
+                {
+                    label: "Date:",
+                    name: "Assignment.date",
+                    type: "datetime"
+                }
+            ]
+        });
+
+        $(tablename).on('click', 'tbody td', function (e) {
+            assignments_editor.inline(this, {onBlur: 'submit'});
+        });
+
+
+        var tableobject = $(tablename).DataTable({
+            dom: "Bfrltip",
+            ajax: {
+                url: '/api/v1/classes/{{ class_.id }}/' + name
+            },
+            columns: [
+                {data: "Assignment.name"},
+                {data: "AssignmentCategory.category", editField: "Assignment.assignment_category_id"},
+                {data: "LearningGoal.name", editField: "Assignment.learning_goal_id"},
+                {data: "Assignment.total_points"},
+                {data: "Assignment.date"}
+            ],
+            select: {
+                style: 'os',
+                blurable: true
+            },
+            keys: {
+                editor: assignments_editor
+            },
+            buttons: [
+                {extend: "edit", editor: assignments_editor},
+                {extend: "create", editor: assignments_editor},
+                {extend: "remove", editor: assignments_editor},
+                'excel',
+                'print'
+            ]
+
+        });
+        $('#' + name + '-tab').on('click', function () {
+            tableobject.ajax.reload(null, false);
+        });
+    });
+
+    /////////////////////////////////////
+    ///Categories(AssignmentCategories)//
+    /////////////////////////////////////
+    $(document).ready(function () {
+        var name = "assignment-categories";
+        var urlname = "assignment_categories";
+        var tablename = '#' + name + '-table';
+        assignment_categories_editor = new $.fn.dataTable.Editor({
+            ajax: {
+                contentType: 'application/json',
+                data: function (d) {
+                    return JSON.stringify(d);
+                },
+                create: {
+                    type: 'POST',
+                    url: '/api/v1/classes/{{ class_.id }}/' + urlname,
+                    contentType: 'application/json',
+                    data: function (d) {
+                        var tmp = d['data'];
+                        d = tmp;
+                        return JSON.stringify(d);
+                    }
+                },
+                edit: {
+                    type: 'PUT',
+                    url: "/api/v1/classes/{{ class_.id }}/" + urlname + "/_id_",
+                    contentType: 'application/json',
+                    data: function (d) {
+                        var tmp = d['data'];
+                        d = tmp;
+                        return JSON.stringify(d);
+                    }
+                },
+                remove: {type: 'DELETE', url: '/api/v1/classes/{{ class_.id }}/' + urlname + '/_id_'}
+            },
+            table: tablename,
+            idSrc: "id",
+            fields: [
+                {
+                    label: "Category",
+                    name: "category"
+                },
+                {
+                    label: "Weight",
+                    name: "weight"
+                },
+                {
+                    type: "readonly",
+                    label: "Class Avg.",
+                    name: "class_avg"
+                }
+            ]
+        });
+
+        $(tablename).on('click', 'tbody td', function (e) {
+            assignment_categories_editor.inline(this, {onBlur: 'submit'});
+        });
+
+        var tableobject = $(tablename).DataTable({
+            dom: "Bfrti",
+            ajax: {
+                url: '/api/v1/classes/{{ class_.id }}/' + urlname
+            },
+            columns: [
+                {data: 'category'},
+                {data: 'weight', render: $.fn.dataTable.render.number(',', '.', 0, '', '%')},
+                {data: 'class_avg'}
+            ],
+            select: {
+                style: 'os',
+                blurable: true
+            },
+            keys: {
+                editor: assignment_categories_editor
+            },
+            paging: false,
+            buttons: [
+                {extend: "edit", editor: assignment_categories_editor},
+                {extend: "create", editor: assignment_categories_editor},
+                {extend: "remove", editor: assignment_categories_editor},
+                'excel',
+                'print'
+            ]
+        });
+        $('#' + name + '-tab').on('click', function () {
+            tableobject.ajax.reload(null, false);
+        });
+    });
+
+    /////////////////////////////////////
+    /////     Learning Goals      ///////
+    /////////////////////////////////////
+    $(document).ready(function () {
+        var name = "learning-goals";
+        var urlname = "learning_goals";
+        var tablename = '#' + name + '-table';
+        learning_goals_editor = new $.fn.dataTable.Editor({
+            ajax: {
+                contentType: 'application/json',
+                data: function (d) {
+                    return JSON.stringify(d);
+                },
+                create: {
+                    type: 'POST',
+                    url: '/api/v1/classes/{{ class_.id }}/' + urlname,
+                    contentType: 'application/json',
+                    data: function (d) {
+                        var tmp = d['data'];
+                        d = tmp;
+                        return JSON.stringify(d);
+                    }
+                },
+                edit: {
+                    type: 'PUT',
+                    url: "/api/v1/classes/{{ class_.id }}/" + urlname + "/_id_",
+                    contentType: 'application/json',
+                    data: function (d) {
+                        var tmp = d['data'];
+                        d = tmp;
+                        return JSON.stringify(d);
+                    }
+                },
+                remove: {type: 'DELETE', url: '/api/v1/classes/{{ class_.id }}/' + urlname + '/_id_'}
+            },
+            table: tablename,
+            idSrc: "id",
+            fields: [
+            {% for label, name in learning_goals_col %}
+        {
+            label: "{{ label }}",
+            name: "{{ name }}"
+        },
+        {% endfor %}
+        {
+            type: "readonly",
+                label: "Class Avg.",
+                name: "class_avg"
+        }
+    ]
+    })
+        ;
+
+        $(tablename).on('click', 'tbody td:not(:last-child)', function (e) {
+            learning_goals_editor.inline(this, {onBlur: 'submit'});
+        });
+
+        var tableobject = $(tablename).DataTable({
+            dom: "Bfrti",
+            ajax: {
+                url: '/api/v1/classes/{{ class_.id }}/' + urlname
+            },
+            columns: [
+            {% for label, name in learning_goals_col %}
+        {
+            data: '{{ name }}'
+        }
+    ,
+        {% endfor %}
+        {
+            data: 'class_avg'
+        }
+    ],
+        select: {
+            style: 'os',
+                blurable
+        :
+            true
+        }
+    ,
+        keys: {
+            editor: learning_goals_editor,
+                columns
+        :
+            ':not(:last-child)'
+        }
+    ,
+        paging: false,
+            buttons
+    :
+        [
+            {extend: "edit", editor: learning_goals_editor},
+            {extend: "create", editor: learning_goals_editor},
+            {extend: "remove", editor: learning_goals_editor},
+            'excel',
+            'print'
+        ]
+    })
+        ;
+        $('#' + name + '-tab').on('click', function () {
+            tableobject.ajax.reload(null, false);
+        });
+    });
+
+    /////////////////////////////////////
+    /////       Attendance      /////////
+    /////////////////////////////////////
+    class_name = "{{ class_.name }}";
+    $(document).ready(function () {
+        var name = "attendance";
+        var tablename = '#' + name + '-table';
+        var fieldString, tableobject;
+        if (class_name.includes("Advisory")) {
+            function manual_ajax_attendance_dt() {
+                $.getJSON('/api/v1/classes/{{ class_.id }}/' + name, function (data) {
+                    createattendancetable(data);
+                })
+                    .fail(function (response, exception) {
+                        var msg = '';
+                        if (response.status === 0) {
+                            msg = 'Not connect.\n Verify Network.';
+                        } else if (response.status == 404) {
+                            msg = 'Requested page not found. [404]';
+                        } else if (response.status == 500) {
+                            msg = 'Internal Server Error [500].';
+                        } else if (exception === 'parsererror') {
+                            msg = 'Requested JSON parse failed.';
+                        } else if (exception === 'timeout') {
+                            msg = 'Time out error.';
+                        } else if (exception === 'abort') {
+                            msg = 'Ajax request aborted.';
+                        } else {
+                            msg = 'Uncaught Error.\n' + response.responseText;
+                        }
+                        console.log(msg);
+                    });
+            }
+
+            function createattendancetable(data) {
+                // Iterate each column and print table headers for Datatables
+                $.each(data.fields, function (k, fieldObj) {
+                    fieldString = '<th>' + fieldObj.label + '</th>';
+                    $('.' + name + '-header').append(fieldString);
+                });
+
+                //datatable creation here
+
+
+                attendance_editor = new $.fn.dataTable.Editor({
+                    ajax: {
+                        contentType: 'application/json',
+                        data: function (d) {
+                            return JSON.stringify(d);
+                        },
+                        edit: {
+                            type: 'PUT',
+                            url: "/api/v1/classes/{{ class_.id }}/" + name + "/_id_",
+                            contentType: 'application/json',
+                            data: function (d) {
+                                var tmp = d['data'];
+                                d = tmp;
+                                return JSON.stringify(d);
+                            }
+                        }
+                    },
+                    table: tablename,
+                    idSrc: "StudentID",
+                    fields: data.fields
+                });
+
+                tableobject = $(tablename).DataTable({
+                    responsive: false,
+                    dom: "Bfrti",
+                    data: data.data,
+                    columns: [
+                        {data: "Student.last"},
+                        {data: "Student.first"},
+                        {
+                            data: "Attendance.arrived",
+                            render: function (data, type, row) {
+                                if (type === 'display') {
+                                    return "<input type='checkbox' class='attendance-checkbox'>";
+                                }
+                                return data;
+                            },
+                            className: "dt-body-center"
+                        },
+                        {data: "Student.phone"}
+                    ],
+                    columnDefs: [
+                        {
+                            // Format the phone number
+                            render: function (data) {
+                                if (data.length == 10) {
+                                    return '(' + data.substring(0, 3) + ') ' + data.substring(3, 6) + '-' + data.substring(6, 10);
+                                } else {
+                                    return null
+                                }
+                            },
+                            targets: -1
+                        }
+                    ],
+                    select: {
+                        style: 'os',
+                        blurable: true,
+                        selector: 'td:not(:nth-child(3))'
+                    },
+                    scrollY: 400,
+                    scrollCollapse: true,
+                    paging: false,
+                    buttons: [
+                        {extend: "edit", editor: attendance_editor},
+                        'excel',
+                        'print'
+                    ],
+                    rowCallback: function (row, data) {
+                        // Set the checked state of the checkbox in the table
+                        $('input.attendance-checkbox', row).prop('checked', data.Attendance.arrived == 1);
+                    }
+                });
+                remove_checked_rows();
+            }
+
+            function remove_checked_rows() {
+                tableobject.rows(function (idx, data, node) {
+                    return data.Attendance.arrived != 0;
+                }).remove().draw();
+            }
+
+            $('#' + name).on('change', 'input.attendance-checkbox', function () {
+                attendance_editor
+                    .edit($(this).closest('tr'), false)
+                    .set('Attendance.arrived', $(this).prop('checked') ? 1 : 0)
+                    .submit();
+                attendance_editor.on('postEdit', function () {
+                    setTimeout(function () {
+                        remove_checked_rows()
+                    }, 1050);
+                });
+            });
+
+            $('#' + name + '-tab').on('click', function () {
+                $('#' + name).empty().append("<button id='start-attendance' class='btn btn-primary'>Start taking attendance!</button>");
+                document.getElementById("start-attendance").addEventListener("click", function () {
+                    startAttendance();
+                });
+            });
+
+            $('#' + name + '-tab').append("Daily Attendance");
+
+            function startAttendance() {
+                $('#' + name).empty().append("<table id='attendance-table' class='table table-striped nowrap table-bordered' style='width:100%'><thead><tr class='attendance-header'></tr></table>");
+                manual_ajax_attendance_dt();
+            }
+        }
+        else {
+            //attendance history here
+            $('#' + name + '-tab').append("Attendance History");
+            $('#' + name).empty().append("Under construction...");
+        }
+
+    });
+}(jQuery));
+
+</script>
+

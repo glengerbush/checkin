@@ -1,0 +1,19 @@
+{
+  "data": [
+    {% for object in objects %}
+    {% set outer_loop = loop %}
+    {
+      {% for colname in column_list %}
+      "{{ colname }}": "{{ object[colname] }}"
+      {% if loop.last %}{% else %},
+      {% endif %}
+      {% endfor %}
+    {% if extra_name is defined %},
+      "{{ extra_name }}": "{{ extra[object.id] }}"
+    {% endif %}
+    }
+    {% if loop.last %}{% else %},
+    {% endif %}
+    {% endfor %}
+  ]
+}

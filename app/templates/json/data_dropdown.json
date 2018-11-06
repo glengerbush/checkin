@@ -1,0 +1,48 @@
+{
+  "data": [
+    {% for object in objects %}
+    {% set outer_loop = loop %}
+    {
+      "{{ object_type }}": {
+        {% for colname in column_list %}
+        "{{ colname }}": "{{ object[colname] }}"
+        {% if loop.last %}{% else %},
+        {% endif %}
+        {% endfor %}
+      },
+      "{{ pick_what[0][0] }}": {
+        "{{ pick_what[0][1] }}": "{{ pick_dict[0][object[pick_what[0][2]]] }}"
+      },
+      "{{ pick_what[1][0] }}": {
+        "{{ pick_what[1][1] }}": "{{ pick_dict[1][object[pick_what[1][2]]] }}"
+      }
+    }
+    {% if loop.last %}{% else %},
+    {% endif %}
+    {% endfor %}
+  ]
+  {% if send_pick_list is defined %},
+  "options": {
+    "{{ object_type }}.{{ pick_what[0][2] }}": [
+      {% for key, value in pick_dict[0].iteritems() %}
+      {
+        "label": "{{ value }}",
+        "value": "{{ key }}"
+      }
+      {% if loop.last %}{% else %},
+      {% endif %}
+      {% endfor %}
+    ],
+    "{{ object_type }}.{{ pick_what[1][2] }}": [
+      {% for key, value in pick_dict[1].iteritems() %}
+      {
+        "label": "{{ value }}",
+        "value": "{{ key }}"
+      }
+      {% if loop.last %}{% else %},
+      {% endif %}
+      {% endfor %}
+    ]
+  }
+  {% endif %}
+}
