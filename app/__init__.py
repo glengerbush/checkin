@@ -2,16 +2,10 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import Config
-from flask_user import UserManager
-from flask_login import LoginManager
-from flask_wtf.csrf import CSRFProtect
-from flask_babel import Babel
-from flask_mail import Mail
+
 
 db = SQLAlchemy()
 migrate = Migrate()
-csrf = CSRFProtect()
-
 
 def create_app(config_class=Config):
     """Create a Flask application.
@@ -24,12 +18,6 @@ def create_app(config_class=Config):
 
     # Load environment variables
     app.config.from_object(config_class)
-
-    # Enable CSRF protection globally
-    csrf.init_app(app)
-
-    # Initialize Flask-BabelEx
-    babel.init_app(app)
 
     # Setup Flask-SQLAlchemy
     db.init_app(app)
@@ -47,6 +35,5 @@ def create_app(config_class=Config):
     return app
 
 
-from models import main, auth, gradebook
-from models.auth import User
+from models import main
 
