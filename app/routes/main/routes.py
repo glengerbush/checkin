@@ -18,11 +18,22 @@ def index():
 #        Checkin      #
 ###############################
 
-@main.route('/checkin')
-def user_home():
-    guid = request.args.get("id")
+@main.route('/checkin', methods=['GET'])
+def checkin():
+    _id = request.args.get("id")
+    # UUID for checkin is not included
+    if not _id:
+        return render_template('no_id.html')
 
-    if not guid:
-        redirect(url_for('main.index'))
+    return render_template('checkin.html')
 
-    return render_template("checkin.html")
+
+@main.route('/checkin', methods=['POST'])
+def submit_checkin():
+
+    if request.args.get("latitude"):
+        return render_template('thank_you.html')
+    else:
+        return render_template('checkin_failure.html')
+
+    return render_template('checkin.html')
