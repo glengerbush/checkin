@@ -1,9 +1,6 @@
 from app import db
 from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy.orm import backref
-from sqlalchemy.ext.hybrid import hybrid_property
 from collections import OrderedDict
-from app.models.uuid import GUID
 import uuid as uuid
 
 
@@ -39,21 +36,17 @@ class NameMixin(object):
     first = db.Column(db.VARCHAR(128), index=True)
     last = db.Column(db.VARCHAR(128), index=True)
 
-    @hybrid_property
-    def full_name(self):
-        return '{0}, {1}'.format(self.last, self.first)
-
 
 ####################################
 #               Tables             #
 ####################################
 
 class Customer(BaseMixin, NameMixin, ContactMixin, db.Model):
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
+    vehicle = db.relationship('Vehicle', backref='Customer', lazy='dynamic')
 
 
 class Vehicle(BaseMixin, db.Model):
-    year = db.Column('Year', db.SmallInteger)
+    year = db.Column("Year", db.SmallInteger)
     make = db.Column("Make", db.VARCHAR(128))
     model = db.Column("Model", db.VARCHAR(128))
     trim = db.Column("Trim", db.VARCHAR(128))
@@ -61,6 +54,7 @@ class Vehicle(BaseMixin, db.Model):
     plate_state = db.Column("State", db.VARCHAR(2))
     plate_number = db.Column("License Plate", db.VARCHAR(12))
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
+    service = db.relationship('Service', backref='Vehicle', lazy='dynamic')
 
 
 class Services(BaseMixin, db.Model):
@@ -70,7 +64,9 @@ class Services(BaseMixin, db.Model):
     checked_in = db.Column("Checked In Status", db.Boolean)
     latitude = db.Column("Latitude", db.Float)
     longitude = db.Column("Longitude", db.Float)
-    uuid = db.Column(GUID(), default=uuid.uuid4, nullable=False, unique=True)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id', ondelete='CASCADE'))
+    uuid = db.Column(db.String(length=32), default=uuid.uuid4().hex)
+
 
 
 

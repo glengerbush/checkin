@@ -7,6 +7,7 @@ from config import Config
 db = SQLAlchemy()
 migrate = Migrate()
 
+
 def create_app(config_class=Config):
     """Create a Flask application.
     """
@@ -35,5 +36,6 @@ def create_app(config_class=Config):
     return app
 
 
-from models import main
+from app.models import main
+from app.routes.main import routes
 

@@ -11,7 +11,7 @@ from flask import redirect, url_for, request
 @main.route('/')
 @main.route('/index')
 def index():
-    return render_template()
+    return render_template("services_table.html")
 
 
 ###############################
@@ -24,3 +24,5 @@ def user_home():
 
     if not guid:
         redirect(url_for('main.index'))
+
+    return render_template("checkin.html")
