@@ -2,9 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>You have successfully checked in, thank you!</title>
+    <title>Success</title>
 </head>
 <body>
-
+{% if available %}
+<h1>You have successfully checked in, thank you!</h1>
+    {% if not latitude and not longitude %}
+        <h2>We were unable to get the location of your vehicle, please try checking in again.</h2>
+    {% endif %}
+{% else %}
+<h1>We have canceled your appointment</h1>
+{% endif %}
 </body>
 </html>

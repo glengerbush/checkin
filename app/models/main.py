@@ -54,7 +54,7 @@ class Vehicle(BaseMixin, db.Model):
     plate_state = db.Column("State", db.VARCHAR(2))
     plate_number = db.Column("License Plate", db.VARCHAR(12))
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
-    service = db.relationship('Service', backref='Vehicle', lazy='dynamic')
+    services = db.relationship('Services', backref='Vehicle', lazy='dynamic')
 
 
 class Services(BaseMixin, db.Model):

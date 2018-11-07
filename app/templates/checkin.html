@@ -5,13 +5,16 @@
     <title>Checkin</title>
 </head>
 <body>
-<form>
+<form action="../checkin" method="post">
     <p>Is your car available for service today?</p>
-    <input type="radio" name="available" value="true"> Yes<br>
-    <input type="radio" name="available" value="false"> No<br>
+    <input type="radio" name="available" value="True"> Yes<br>
+    <input type="radio" name="available" value=""> No<br>
+    <input type="hidden" name="uuid" id="uuid" value="{{ uuid }}">
+    <input type="hidden" id="longitude" name="latitude" value="">
+    <input type="hidden" id="latitude" name="longitude" value="">
 
 
-    <p>By clicking submit we will use the current location of your device as the location of your parked car.</p>
+    <p>When you have parked your car, please click the "Parked" button<br> to save your location and then submit the checkin form.</p>
 
     <button onclick="return getLocation()" type="button">Get Current Location</button>
     <input type="submit" value="submit">
@@ -21,6 +24,8 @@
 
 <script>
     var x = document.getElementById("demo");
+    var latitude = document.getElementById("latitude");
+    var longitude = document.getElementById("longitude");
 
     function getLocation() {
         if (navigator.geolocation) {
@@ -31,8 +36,8 @@
     }
 
     function showPosition(position) {
-        x.innerHTML = "Latitude: " + position.coords.latitude +
-            "<br>Longitude: " + position.coords.longitude;
+        latitude.value = position.coords.latitude;
+        longitude.value = position.coords.longitude;
     }
 </script>
 </html>
