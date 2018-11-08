@@ -38,7 +38,7 @@
                 function savePosition(position) {
                     latitude.value = position.coords.latitude;
                     longitude.value = position.coords.longitude;
-                    parkingLocation.replaceWith("Complete!");
+                    parkingLocation.innerHTML= "Complete!" ;
                 }
 
                 function error(err) {
@@ -47,7 +47,7 @@
 
                 function getLocation() {
                     if (navigator.geolocation) {
-                        parkingLocation.replaceWith("Please wait, getting location");
+                        parkingLocation.innerHTML = "Please wait, getting location";
                         navigator.geolocation.getCurrentPosition(savePosition, error, options);
                     } else {
                         console.warn("Geolocation is not supported by this browser.");
