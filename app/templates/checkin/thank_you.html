@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Success</title>
-</head>
-<body>
+{% block title %}
+Success
+{% endblock title %}
+
+{% block content %}
 {% if available %}
 <h1>You have successfully checked in, thank you!</h1>
     {% if not latitude and not longitude %}
@@ -13,5 +11,5 @@
 {% else %}
 <h1>We have canceled your appointment</h1>
 {% endif %}
-</body>
-</html>
+{% endblock content %}
+

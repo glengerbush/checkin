@@ -30,9 +30,6 @@ def create_app(config_class=Config):
     from app.routes.main import main
     app.register_blueprint(main)
 
-    from app.routes.api.services import api_v1 as services_api
-    app.register_blueprint(services_api, url_prefix='/api/v1')
-
     return app
 
 

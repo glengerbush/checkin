@@ -1,8 +1,8 @@
-"""init migration
+"""empty message
 
-Revision ID: 751d752ad476
+Revision ID: 32e5dafcd3db
 Revises: 
-Create Date: 2018-11-06 18:43:05.332739
+Create Date: 2018-11-07 21:49:42.225374
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '751d752ad476'
+revision = '32e5dafcd3db'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,28 +32,28 @@ def upgrade():
     op.create_index(op.f('ix_customer_last'), 'customer', ['last'], unique=False)
     op.create_table('vehicle',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('Year', sa.SmallInteger(), nullable=True),
-    sa.Column('Make', sa.VARCHAR(length=128), nullable=True),
-    sa.Column('Model', sa.VARCHAR(length=128), nullable=True),
-    sa.Column('Trim', sa.VARCHAR(length=128), nullable=True),
-    sa.Column('Color', sa.VARCHAR(length=128), nullable=True),
-    sa.Column('State', sa.VARCHAR(length=2), nullable=True),
-    sa.Column('License Plate', sa.VARCHAR(length=12), nullable=True),
+    sa.Column('year', sa.SmallInteger(), nullable=True),
+    sa.Column('make', sa.VARCHAR(length=128), nullable=True),
+    sa.Column('model', sa.VARCHAR(length=128), nullable=True),
+    sa.Column('trim', sa.VARCHAR(length=128), nullable=True),
+    sa.Column('color', sa.VARCHAR(length=128), nullable=True),
+    sa.Column('plate_state', sa.VARCHAR(length=2), nullable=True),
+    sa.Column('plate_number', sa.VARCHAR(length=12), nullable=True),
     sa.Column('customer_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['customer_id'], ['customer.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('services',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('Date', sa.DATE(), nullable=True),
-    sa.Column('Type', sa.VARCHAR(length=128), nullable=True),
-    sa.Column('Workplace', sa.VARCHAR(length=128), nullable=True),
-    sa.Column('Checked In Status', sa.Boolean(), nullable=True),
-    sa.Column('Latitude', sa.Float(), nullable=True),
-    sa.Column('Longitude', sa.Float(), nullable=True),
+    sa.Column('date', sa.DATE(), nullable=True),
+    sa.Column('type', sa.VARCHAR(length=128), nullable=True),
+    sa.Column('workplace', sa.VARCHAR(length=128), nullable=True),
+    sa.Column('checked_in', sa.Boolean(), nullable=True),
+    sa.Column('latitude', sa.Float(), nullable=True),
+    sa.Column('longitude', sa.Float(), nullable=True),
     sa.Column('vehicle_id', sa.Integer(), nullable=True),
-    sa.Column('uuid', sa.String(length=32), nullable=True),
-    sa.ForeignKeyConstraint(['vehicle_id'], ['vehicle.id'], ondelete='CASCADE'),
+    sa.Column('checkin_token', sa.String(length=32), nullable=True),
+    sa.ForeignKeyConstraint(['vehicle_id'], ['vehicle.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

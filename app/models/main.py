@@ -46,26 +46,26 @@ class Customer(BaseMixin, NameMixin, ContactMixin, db.Model):
 
 
 class Vehicle(BaseMixin, db.Model):
-    year = db.Column("Year", db.SmallInteger)
-    make = db.Column("Make", db.VARCHAR(128))
-    model = db.Column("Model", db.VARCHAR(128))
-    trim = db.Column("Trim", db.VARCHAR(128))
-    color = db.Column("Color", db.VARCHAR(128))
-    plate_state = db.Column("State", db.VARCHAR(2))
-    plate_number = db.Column("License Plate", db.VARCHAR(12))
+    year = db.Column(db.SmallInteger)
+    make = db.Column(db.VARCHAR(128))
+    model = db.Column(db.VARCHAR(128))
+    trim = db.Column(db.VARCHAR(128))
+    color = db.Column(db.VARCHAR(128))
+    plate_state = db.Column(db.VARCHAR(2))
+    plate_number = db.Column(db.VARCHAR(12))
     customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'))
     services = db.relationship('Services', backref='Vehicle', lazy='dynamic')
 
 
 class Services(BaseMixin, db.Model):
-    date = db.Column("Date", db.DATE)
-    type = db.Column("Type",db.VARCHAR(128))
-    workplace = db.Column("Workplace",db.VARCHAR(128))
-    checked_in = db.Column("Checked In Status", db.Boolean)
-    latitude = db.Column("Latitude", db.Float)
-    longitude = db.Column("Longitude", db.Float)
-    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id', ondelete='CASCADE'))
-    uuid = db.Column(db.String(length=32), default=uuid.uuid4().hex)
+    date = db.Column(db.DATE)
+    type = db.Column(db.VARCHAR(128))
+    workplace = db.Column(db.VARCHAR(128))
+    checked_in = db.Column(db.Boolean)
+    latitude = db.Column(db.Float)
+    longitude = db.Column(db.Float)
+    vehicle_id = db.Column(db.Integer, db.ForeignKey('vehicle.id'))
+    checkin_token = db.Column(db.String(length=32), default=uuid.uuid4().hex)
 
 
 

@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<p>TESTING</p>
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    Services Table
+{% endblock title %}
+{% block content %}
+<table>
+    <tr>
+        {% for header in columnHeaders %}
+        <th>{{ header }}</th>
+        {% endfor %}
+    </tr>
+{% for service in services %}
+    <tr>
+        {% for header in columnHeaders %}
+        <td>{{ service[header] }}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}
+</table>
+{% endblock content %}
