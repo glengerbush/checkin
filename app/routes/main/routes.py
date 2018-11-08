@@ -41,7 +41,7 @@ def submit_checkin():
     if available is not None:
         # load stuff into the database here
         service = db.session.query(Services).filter(Services.uuid == uuid).one_or_none()
-        if available: service.checked_in = bool(available)
+        service.checked_in = bool(available)
         if longitude and latitude:
             service.longitude = longitude
             service.latitude = latitude
