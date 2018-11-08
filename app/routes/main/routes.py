@@ -47,6 +47,6 @@ def createCheckin():
             service.longitude = longitude
             service.latitude = latitude
         db.session.commit()
-        return render_template('checkin/thank_you.html', available=available)
+        return render_template('checkin/thank_you.html', available=available, latitude=latitude, longitude=longitude)
     else:
         return render_template('checkin/failure.html')
