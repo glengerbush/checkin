@@ -10,34 +10,45 @@
     <input type="radio" name="available" value="True"> Yes<br>
     <input type="radio" name="available" value=""> No<br>
     <input type="hidden" name="uuid" id="uuid" value="{{ uuid }}">
-    <input type="hidden" id="longitude" name="latitude" value="">
-    <input type="hidden" id="latitude" name="longitude" value="">
+    <input type="hidden" id="longitude" name="longitude" value="">
+    <input type="hidden" id="latitude" name="latitude" value="">
 
 
-    <p>When you have parked your car, please click the "Parked" button<br> to save your location and then submit the checkin form.</p>
+    <p>When you have parked your car, please click the "Parked" button<br> to save your location and then submit the
+        checkin form.</p>
 
-    <button onclick="return getLocation()" type="button">Get Current Location</button>
+    <button onclick="return getLocation()" type="button">Parked</button>
     <input type="submit" value="submit">
 </form>
 
 </body>
 
 <script>
-    var x = document.getElementById("demo");
     var latitude = document.getElementById("latitude");
     var longitude = document.getElementById("longitude");
+    var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+    };
+
+    function savePosition(position) {
+        latitude.value = position.coords.latitude;
+        longitude.value = position.coords.longitude;
+    }
+
 
     function getLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, enableHighAccuracy: true);
+            navigator.geolocation.getCurrentPosition(savePosition, error, options);
         } else {
-            x.innerHTML = "Geolocation is not supported by this browser.";
+            console.warn("Geolocation is not supported by this browser.");
         }
     }
 
-    function showPosition(position) {
-        latitude.value = position.coords.latitude;
-        longitude.value = position.coords.longitude;
+
+    function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 </script>
 </html>
