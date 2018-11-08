@@ -11,14 +11,13 @@
         <input type="hidden" id="longitude" name="longitude" value="">
         <input type="hidden" id="latitude" name="latitude" value="">
 
-
-        <p>When you have parked your car, please click the "Parked" button<br> to save your location and then submit the
-            checkin form.</p>
         <div id="parkingLocation" style="display: none;">
+            <p>When you have parked your car, please click the "Parked" button to save your location and then submit the
+            checkin form.</p>
             <button id="parkedButton" onclick="return Checkin.getLocation()" type="button">Parked</button>
         </div>
         <br><br>
-        <input id="submitButton" type="submit" value="submit" style="display: none;">
+        <input id="submitButton" type="submit" value="Submit" style="display: none;">
     </form>
 {% endblock content %}
 
