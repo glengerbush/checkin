@@ -3,31 +3,26 @@
     Services Table
 {% endblock title %}
 {% block content %}
-<table>
-    <tr>
-        {% for header in columnHeaders %}
-        <th>{{ header }}</th>
-        {% endfor %}
-    </tr>
-{% for service in services %}
-    <tr>
-        {% for header in columnHeaders %}
-        <td>{{ service[header] }}</td>
-        {% endfor %}
-    </tr>
-{% endfor %}
-</table>
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-hover table-borderless">
+                <thead>
+                <tr>
+                    {% for header in columnHeaders %}
+                        <th>{{ header }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for service in services %}
+                    <tr>
+                        {% for header in columnHeaders %}
+                            <td>{{ service[header] }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock content %}
-{% block basescripts %}
-<style type="text/css" media="screen">
-
-table{
-border-collapse:collapse;
-border:1px solid #4f08a5;
-}
-
-table td,th{
-border:1px solid #4f08a5;
-}
-</style>
-{% endblock basescripts %}

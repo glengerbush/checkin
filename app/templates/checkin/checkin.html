@@ -3,70 +3,122 @@
     Checkin
 {% endblock title %}
 {% block content %}
-    <form action="../checkin" method="post">
-        <p>Is your car available for service today?</p>
-        <input type="radio" name="available" onclick="Checkin.availableRadio(true)" value="True"> Yes<br>
-        <input type="radio" name="available" onclick="Checkin.availableRadio(false)" value=""> No<br>
-        <input type="hidden" name="checkinToken" value="{{ checkin_token }}">
-        <input type="hidden" id="longitude" name="longitude" value="">
-        <input type="hidden" id="latitude" name="latitude" value="">
-
-        <div id="parkingLocation" style="display: none;">
-            <p>When you have parked your car, please click the "Parked" button to save your location and then submit the
-            checkin form.</p>
-            <button id="parkedButton" onclick="return Checkin.getLocation()" type="button">Parked</button>
+    <form id="checkinForm" action="../checkin" method="post">
+        <h3>Is your car available for service today?</h3>
+        <div class="col-md-7 white-splash">
+            <div class="row">
+                <div class="col mt-3">
+                    <span id="available-yes" class="make-selection"> Yes<br></span>
+                    <span id="available-no" class="make-selection"> No<br></span>
+                    <input type="hidden" id="available" name="available" value="">
+                    <input type="hidden" name="checkinToken" value="{{ checkin_token }}">
+                    <input type="hidden" id="longitude" name="longitude" value="">
+                    <input type="hidden" id="latitude" name="latitude" value="">
+                </div>
+            </div>
+            <div id="parkingLocation" style="display: none;">
+                <div class="row">
+                    <div class="col">
+                        <p>When you have parked your car, please click the "Parked" button to save your location and
+                            then
+                            submit
+                            the
+                            checkin form.</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button id="parkedButton" class="btn-large header" onclick="return Checkin.getLocation()"
+                                type="button">
+                            Parked
+                        </button>
+                        <p id="locationError" class="mt-4"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input id="submitButton" name="action" class="btn-large header" type="submit"
+                           value="Submit"
+                           style="display: none;">
+                </div>
+            </div>
         </div>
-        <br><br>
-        <input id="submitButton" type="submit" value="Submit" style="display: none;">
     </form>
 {% endblock content %}
-
 {% block basescripts %}
     <script>
+
         var Checkin = (function () {
-                var parkingLocation = document.getElementById("parkingLocation");
-                var submitButton = document.getElementById("submitButton");
-                var latitude = document.getElementById("latitude");
-                var longitude = document.getElementById("longitude");
-                var options = {
-                    enableHighAccuracy: true,
-                    timeout: 6000,
-                    maximumAge: 0
-                };
+            var parkingLocation = document.getElementById("parkingLocation");
+            var availableYes = document.getElementById("available-yes");
+            var availableNo = document.getElementById("available-no");
+            var available = document.getElementById("available");
+            var submitButton = document.getElementById("submitButton");
+            var latitude = document.getElementById("latitude");
+            var longitude = document.getElementById("longitude");
+            var parkedButton = document.getElementById("parkedButton");
+            var locationError = document.getElementById("locationError");
+            var checkinForm = document.getElementById("checkinForm");
+            var options = {
+                enableHighAccuracy: true,
+                timeout: 6000,
+                maximumAge: 0
+            };
 
-                function savePosition(position) {
-                    latitude.value = position.coords.latitude;
-                    longitude.value = position.coords.longitude;
-                    parkingLocation.innerHTML= "Complete!" ;
+            availableYes.addEventListener("click", function () {
+                selectAvailability(true)
+            });
+            availableNo.addEventListener("click", function () {
+                selectAvailability(false)
+            });
+
+
+            function selectAvailability(selection) {
+                if (selection) {
+                    available.value = "True";
+                    parkingLocation.style.display = "block";
+                    submitButton.style.display = "none";
+                    availableYes.classList.replace("make-selection", "selected");
+                    availableNo.classList.replace("selected", "make-selection");
+                } else {
+                    available.value = "";
+                    parkingLocation.style.display = "none";
+                    submitButton.style.display = "block";
+                    availableNo.classList.replace("make-selection", "selected");
+                    availableYes.classList.replace("selected", "make-selection");
                 }
+            }
 
-                function error(err) {
-                    console.warn(`ERROR(${err.code}): ${err.message}`);
-                }
+            function savePosition(position) {
+                latitude.value = position.coords.latitude;
+                longitude.value = position.coords.longitude;
+                parkingLocation.innerHTML = "Complete!";
+                checkinForm.submit();
+            }
 
-                function getLocation() {
-                    if (navigator.geolocation) {
-                        parkingLocation.innerHTML = "Please wait, getting location";
-                        navigator.geolocation.getCurrentPosition(savePosition, error, options);
-                    } else {
-                        console.warn("Geolocation is not supported by this browser.");
-                    }
-                }
-
-                function availableRadio(isAvailable) {
-                    if (isAvailable) {
-                        parkingLocation.style.display = "block";
-                    } else {
-                        parkingLocation.style.display = "none";
-                    }
+            function error(err) {
+                console.warn(`ERROR(${err.code}): ${err.message}`);
+                if (error.code == error.PERMISSION_DENIED) {
+                    parkedButton.innerHTML = "Failed";
+                    locationError.innerHTML = "Please enable location services.<br>Or submit without locating your vehicle."
                     submitButton.style.display = "block";
                 }
+            }
 
-                return {
-                    getLocation: getLocation,
-                    availableRadio: availableRadio
-                };
-            })();
+            function getLocation() {
+                if (navigator.geolocation) {
+                    parkedButton.innerHTML = "Locating...";
+                    navigator.geolocation.getCurrentPosition(savePosition, error, options);
+                } else {
+                    console.warn("Geolocation is not supported by this browser.");
+                }
+            }
+
+            return {
+                getLocation: getLocation
+            };
+        })();
     </script>
 {% endblock basescripts %}
 

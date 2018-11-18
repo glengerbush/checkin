@@ -1,16 +1,25 @@
 {% extends 'base.html' %}
 {% block title %}
-Success
+    Success
 {% endblock title %}
 
 {% block content %}
-{% if available %}
-<h1>You have successfully checked in, thank you!</h1>
-    {% if not latitude and not longitude %}
-        <h2>We were unable to get the location of your vehicle, please try checking in again.</h2>
-    {% endif %}
-{% else %}
-<h1>We have canceled your appointment</h1>
-{% endif %}
+    <div class="row">
+        <div class="col-md-7">
+            {% if available %}
+                <h3>You have successfully checked in, thank you!</h3>
+                {% if not latitude and not longitude %}
+                    <div class="col white-splash">
+                        <p>Unfortunately, were unable to get the location of your vehicle, please go back and try checking in
+                            again.</p>
+                        <a href="../checkin?id={{ checkinToken }}" class="btn-large header"
+                           style="color: #FFFFFF; text-decoration: none;">Go Back</a>
+                    </div>
+                {% endif %}
+            {% else %}
+                <h3>We have canceled your appointment</h3>
+            {% endif %}
+        </div>
+    </div>
 {% endblock content %}
 

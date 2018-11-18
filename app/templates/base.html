@@ -2,15 +2,73 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}
-    {% endblock title %}
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon"/>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+
+    <!-- Other CSS from Zippity-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,600,800" rel="stylesheet">
+
+    <!-- Custom CSS from Zippity-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/animate.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/materialize.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/zippity.css') }}">
+
+    <title>
+        {% block title %}
+        {% endblock title %}
     </title>
+
 </head>
 <body>
-{% block content %}
-{% endblock content %}
+<div class="zippity-header">
+    <div class="container-fluid">
+        <nav>
+            <div class="nav-wrapper">
+                <div class="col-auto"><a href="https://zippitycars.com" class="brand-logo" target="_blank">
+                    <ul>
+                        <li><img src="https://zippity.imgix.net/zippity-logo-white.png?auto=format,compress"
+                                 alt="Zippity"></li>
+                    </ul>
+                </a>
+                    <ul class="right hide-on-med-and-down">
+                        <li target="_blank"><a href="https://zippitycars.com/faq">FAQ</a></li>
+                        <li><a href="/login">
+                            <button class="btn"><!-- react-text: 2822 -->Login<!-- /react-text --></button>
+                        </a></li>
+                    </ul>
+                    <ul id="nav-mobile" class="side-nav" style="transform: translateX(-100%);">
+                        <li target="_blank"><a href="https://zippitycars.com/faq">FAQ</a></li>
+                        <li><a href="/login">
+                            <button class="btn"><!-- react-text: 2829 -->Login<!-- /react-text --></button>
+                        </a></li>
+                    </ul>
+                    <a class="button-collapse" href="#" data-activates="nav-mobile"><i class="material-icons">view_headline</i></a>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div class="pl-4 pr-4">
+    <div class="container-fluid clearfix grey-splash pl-4 pr-4 p-2" id="pricing">
+        {% block content %}
+        {% endblock content %}
+    </div>
+</div>
 </body>
 </html>
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+        integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+        crossorigin="anonymous"></script>
 {% block basescripts %}
 
 {% endblock basescripts %}

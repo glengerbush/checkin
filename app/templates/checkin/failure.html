@@ -3,5 +3,13 @@
     Checkin failed
 {% endblock title %}
 {% block content %}
-Checkin failed, please try again.
+    <div class="row text-center justify-content-center">
+        <div class="col-md-7">
+            <h3>Checkin failed, please go back and try again.</h3>
+            <p>Unfortunately, were unable to get the location of your vehicle, please go back and try checking in
+                again.</p>
+            <a href="../checkin?id={{ checkinToken }}" class="btn-large header"
+               style="color: #FFFFFF; text-decoration: none;">Go Back</a>
+        </div>
+    </div>
 {% endblock content %}

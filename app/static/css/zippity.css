@@ -1,0 +1,537 @@
+@font-face {
+    font-family: 'Museo Sans Rounded';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/museo-sans-500.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/museo-sans-500.woff') format('woff'),
+        /* Modern Browsers */ url('../fonts/museo-sans-500.ttf') format('truetype');
+    /* Safari, Android, iOS */
+}
+
+@font-face {
+    font-family: 'Museo Sans Rounded';
+    font-style: normal;
+    /* Weight 400 is intentional, so we can show a lighter font as needed across the app without significant CSS rewrites */
+    font-weight: 400;
+    src: url('../fonts/museo-sans-300.eot'); /* IE9 Compat Modes */
+    src: url('../fonts/museo-sans-300.woff') format('woff'),
+        /* Modern Browsers */ url('../fonts/museo-sans-300.ttf') format('truetype');
+    /* Safari, Android, iOS */
+}
+
+/*Footer Styles*/
+footer.page-footer {
+    background-color: #2c3e50;
+    font-weight: 600;
+}
+
+.page-footer .container a {
+    margin: 0 1em 0 0;
+}
+
+.page-footer .footer-copyright #copyright-notice {
+    margin-right: 1em;
+}
+
+.page-footer .footer-copyright a {
+    margin-left: 1em;
+}
+
+/*Sticker footer styles*/
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+}
+
+body {
+    font-family: 'Museo Sans Rounded', sans-serif;
+}
+
+/*Header Styles*/
+.zippity-header {
+    background-color: #459ba1;
+    height: 80px;
+}
+
+.zippity-header button,
+.zippity-header button:focus {
+    background-color: #459ba1;
+    box-shadow: 0 0 0 0;
+    border: 2px solid #ffffff;
+    font-size: 15px;
+    line-height: 15px;
+    font-weight: 800;
+}
+
+.zippity-header button:hover {
+    background-color: #ffffff;
+    color: #2c3e50;
+}
+
+nav,
+nav .nav-wrapper i,
+nav li {
+    height: 80px;
+    line-height: 80px;
+}
+
+nav a {
+    font-weight: 800;
+}
+
+.brand-logo img {
+    max-height: 80px;
+    padding: 5px 0;
+}
+
+#nav-mobile .hi-user,
+#nav-mobile .nav-space {
+    display: none;
+}
+
+.partnership-with {
+    font-weight: 300;
+    margin: 0 0.5em 0 1.25em;
+    padding: 20px 0 0 0;
+}
+
+.castrol-logo {
+    padding: 45px 0 0 0;
+}
+
+@media screen and (max-width: 900px) {
+    .partnership-with,
+    .castrol-logo {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .partnership-with-mobile,
+    .castrol-logo-mobile {
+        display: none;
+    }
+}
+
+.partnership-with-mobile {
+    font-size: 110%;
+    font-weight: 700;
+    margin: 3em 0.5em 0.25em 0.5em;
+}
+
+.castrol-logo-mobile {
+    margin: 0 0.5em 1em 0.5em;
+}
+
+.castrol-logo-mobile img {
+    width: 80%;
+}
+
+#nav-mobile {
+    color: #2c3e50;
+}
+
+#nav-mobile i,
+#nav-mobile li {
+    height: 40px;
+    line-height: 40px;
+}
+
+#nav-mobile a,
+#nav-mobile button {
+    font-size: 22px;
+    font-weight: 800;
+    padding: 0;
+    margin: 1em 0.5em;
+    background-color: #ffffff;
+    border: 0;
+    color: #2c3e50;
+}
+
+#nav-mobile strong {
+    margin: 1em 2em;
+}
+
+.referral-chip {
+    background-color: #d74742;
+    color: #ffffff;
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+}
+
+/* Services Page */
+#pricing .service {
+    border-bottom: 1px solid #eeeeee;
+    padding: 0.5rem 0;
+    margin-bottom: 0;
+}
+
+.discountedPrice {
+    font-weight: 600;
+    color: #d74742;
+}
+
+.emphasize-service {
+    font-weight: 600;
+}
+
+.emphasize-service .label {
+    color: #d74742;
+}
+
+.diagnostic-complete-description {
+    font-size: 75%;
+    line-height: 1.5em;
+}
+
+/*Services page alert message*/
+p.alert {
+    background: #d74742;
+    color: #ffffff;
+    padding: 0.75rem;
+    border-radius: 0.3rem;
+    font-style: italic;
+}
+
+/*Services Page More Info Button*/
+#pricing .more-info {
+    text-decoration: underline;
+}
+
+#pricing .more-info:hover {
+    cursor: pointer;
+}
+
+/*Viral Loops Widget*/
+.referral-zone {
+    text-align: left;
+    padding: 1em;
+    border: 1px solid #d74742;
+    border-radius: 1em;
+}
+
+.referral-zone h3 {
+    color: #d74742;
+}
+
+/*Simple Services*/
+
+@media screen and (min-width: 630px) {
+    .simple-services-card .card-content {
+        min-height: 12em;
+    }
+}
+
+.simple-services-card .card-content p {
+    margin: 1em 0;
+    font-size: 1.1em;
+}
+
+.simple-services-card .card-content .recommended-subheader {
+    font-weight: 600;
+    color: #459ba1;
+}
+
+.simple-services-card .card-content .experts-subheader {
+    font-weight: 600;
+}
+
+.simple-services-card .card-content .tires-subheader {
+    color: #525252;
+    font-weight: 600;
+}
+
+.simple-services-card .card-content .detailing-subheader {
+    font-weight: 600;
+    color: #d74742;
+}
+
+.card.simple-services-card .card-action,
+.detailing-card .card-action {
+    padding: 0;
+}
+
+.card.simple-services-card .card-action span,
+.detailing-card .card-action span {
+    color: #ffffff !important;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 1.2rem;
+    padding: 20px;
+}
+
+.simple-services-card.detail-card .card-action span {
+    background-color: #d74742;
+}
+
+.simple-services-card .card-content .card-title,
+.detailing-card .card-content .card-title {
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.detailing-card img {
+    margin: 1em auto 2em auto;
+    display: block;
+}
+
+.detailing-card .card-action {
+    color: #ffffff;
+}
+
+.detailing-card {
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.3), 0 1px 5px 0 rgba(0, 0, 0, 0.3),
+    0 3px 1px -2px rgba(0, 0, 0, 0.35);
+}
+
+.detailing-card.full-detail ul li {
+    /* font-weight: 600; */
+}
+
+.detailing-modal-list i {
+    vertical-align: middle;
+}
+
+.simple-services-card.beginner-card .card-action {
+    background: #459ba1;
+}
+
+.simple-services-card.tires-card .card-action {
+    background: #525252;
+}
+
+.simple-services-card.expert-card .card-action {
+    background: #2c3e50;
+}
+
+.simple-services-card .card-action:hover {
+    opacity: 0.8;
+}
+
+.hidden-icon {
+    visibility: hidden;
+}
+
+/*Diagnostic styles*/
+.card.services-we-provide .card-content p {
+    margin: 0 0 1em 0;
+}
+
+/* Schedule page styles */
+#pricing .calendar .dates li.available {
+    border: 1px solid #ffd1d0;
+
+    padding: 0.4em;
+    margin: 0.5em 0;
+}
+
+#pricing .calendar .dates li.active {
+    background-color: #d74742;
+    color: white;
+    font-weight: bold;
+    padding: 0.4em;
+    margin: 0.5em 0;
+}
+
+#pricing .calendar .dates li.unavailable {
+    color: #ccc;
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 0.4em;
+    margin: 0.5em 0;
+}
+
+/* New list styles */
+#pricing ul.vehicle-selection.columns {
+    columns: 15rem auto;
+}
+
+#pricing ul.vehicle-selection li {
+    columns: auto auto;
+    cursor: pointer;
+    padding: 0.2em 0;
+    color: #d74742;
+}
+
+#pricing ul.vehicle-selection li:hover {
+    text-decoration: underline;
+}
+
+#pricing .make-selection {
+    cursor: pointer;
+    padding: 0.2em 0;
+    margin: 0.2em;
+    border-radius: 10px;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+
+    border: 2px solid lightgray;
+    -webkit-box-shadow: 0px;
+    -moz-box-shadow: 0px;
+    box-shadow: 0px;
+
+    -webkit-transition: all 400ms ease-out;
+    -moz-transition: all 400ms ease-out;
+    -o-transition: all 400ms ease-out;
+    transition: all 400ms ease-out;
+}
+
+#pricing .selected {
+    background: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    padding: 0.2em 0;
+    margin: 0.2em;
+    border-radius: 10px;
+    text-align: center;
+    overflow: hidden;
+    display: inline-block;
+
+    border: 2px black;
+    -webkit-box-shadow: 0px;
+    -moz-box-shadow: 0px;
+    box-shadow: 0px;
+
+    -webkit-transition: all 400ms ease-out;
+    -moz-transition: all 400ms ease-out;
+    -o-transition: all 400ms ease-out;
+    transition: all 400ms ease-out;
+}
+
+@media screen and (min-width: 630px) {
+    #pricing .make-selection {
+        line-height: 80px;
+        height: 90px;
+        width: 135px;
+        font-size: 16px;
+    }
+
+    #pricing .selected {
+        line-height: 80px;
+        height: 90px;
+        width: 135px;
+        font-size: 16px;
+    }
+}
+
+
+@media screen and (max-width: 630px) {
+    #pricing .make-selection {
+        line-height: 42px;
+        height: 50px;
+        width: 75px;
+        font-size: 11px;
+    }
+    #pricing .selected {
+        line-height: 42px;
+        height: 50px;
+        width: 75px;
+        font-size: 11px;
+    }
+}
+
+#pricing .make-selection:hover {
+    border: 2px solid black;
+    -webkit-box-shadow: 2px 2px 15px 0px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 2px 2px 15px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: 2px 2px 15px 0px rgba(0, 0, 0, 0.3);
+}
+
+#coupon-code-input {
+    border-bottom: 2px solid #459ba1;
+}
+
+#coupon-code-input:focus {
+    border-bottom: 2px solid #d74742;
+}
+
+/*  APPROVE SERVICES STYLES */
+.approve-services .upsells-list button {
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 0 1em;
+    min-width: 130px;
+}
+
+@media only screen and (max-width: 1100px) {
+    .approve-services .upsells-list button {
+        font-size: 0.6em;
+        min-width: 102px;
+    }
+}
+
+.approve-services .upsells-list {
+    border-bottom: 1px solid #eeeeee;
+    padding: 1em 0;
+}
+
+.approve-services .upsells-list .material-icons {
+    vertical-align: middle;
+}
+
+.approve-services .upsells-list:last-child {
+    border: none;
+    margin-bottom: 0;
+}
+
+.approve-services .misc-line-item .row {
+    margin-bottom: 10px;
+}
+
+/* .approve-services .upsells-list {
+  font-weight: 500;
+} */
+
+.approve-services-border-box {
+    border: 2px solid #eeeeee;
+    padding: 1em;
+    border-radius: 1em;
+    margin-bottom: 2em;
+}
+
+.text-link {
+    color: #d74742;
+}
+
+.text-link:hover {
+    cursor: pointer;
+}
+
+i.vertical-align-middle {
+    vertical-align: middle;
+}
+
+#location,
+#howDidHear {
+    width: 100%;
+    max-width: 400px;
+}
+
+.tire-number-select-row {
+    margin-bottom: 0;
+}
+
+.check-icon {
+    color: #459ba1;
+    margin-top: 0.1em;
+}
+
+.inline-image-container {
+    width: 5em;
+    display: inline-block;
+}
+
+@media screen and (max-width: 992px) {
+    .inline-image-container {
+        display: block;
+    }
+}
