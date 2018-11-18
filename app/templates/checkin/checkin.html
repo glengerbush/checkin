@@ -28,10 +28,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <button id="parkedButton" class="btn-large header" onclick="return Checkin.getLocation()"
-                                type="button">
-                            Parked
-                        </button>
+                        <button id="parkedButton" class="btn-large header" type="button">Parked</button>
                         <p id="locationError" class="mt-4"></p>
                     </div>
                 </div>
@@ -72,6 +69,8 @@
             availableNo.addEventListener("click", function () {
                 selectAvailability(false)
             });
+
+            parkedButton.addEventListener("click", getLocation);
 
 
             function selectAvailability(selection) {
@@ -114,10 +113,6 @@
                     console.warn("Geolocation is not supported by this browser.");
                 }
             }
-
-            return {
-                getLocation: getLocation
-            };
         })();
     </script>
 {% endblock basescripts %}
